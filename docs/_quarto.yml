@@ -1,0 +1,21 @@
+project:
+  type: website
+  output-dir: ../_site
+
+website:
+  title: "Quarto Template for Julia Jupyter Notebooks"
+  navbar:
+    search: true
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+      - plots.ipynb
+      - sub/plots.ipynb
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    html-math-method: mathjax
