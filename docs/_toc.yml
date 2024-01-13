@@ -6,7 +6,14 @@ root: index
 parts:
   - caption: Partial DEs
     chapters:
-    - glob: pde/*.ipynb
+    - file: pde/index
+    - file: pde/pde-01-sis
+    - file: pde/pde-02-heat
+    - file: pde/pde-03-brusselator
   - caption: Neural DEs
     chapters:
-    - glob: ude/*.ipynb
+    - file: ude/index
+    - file: ude/ude-01-firstexample
+    - file: ude/ude-02-multishooting
+    - file: ude/ude-03-neuralode
+    - file: ude/ude-04-poission
