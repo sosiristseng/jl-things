@@ -20,6 +20,12 @@ env:
 
 jobs:
   update-manifest:
+    strategy:
+      matrix:
+        dir:
+          - pde
+          - ude
+      fail-fast: false
     permissions:
       contents: write
       pull-requests: write
@@ -32,6 +38,7 @@ jobs:
         with:
           version: ${{ env.JL_VER }}
       - name: Update Julia dependencies
+        working-directory: docs/${{ matrix.dir }}
         env:
           JULIA_PKG_PRECOMPILE_AUTO: '0'
           JULIA_PROJECT: '@.'
@@ -48,7 +55,8 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v5
         with:
-          title: Julia Dependency Update
+          title: Julia Dependency Update for ${{ matrix.dir }}
           token: ${{ steps.generate-token.outputs.token }}
+          branch: update-${{ matrix.dir }}
           labels: |
             automerge

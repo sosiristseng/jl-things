@@ -3,6 +3,10 @@
 
 format: jb-book
 root: index
-chapters:
-  - file: plots
-  - file: sub/plots
+parts:
+  - caption: Partial DEs
+    chapters:
+    - glob: pde/*.ipynb
+  - caption: Neural DEs
+    chapters:
+    - glob: ude/*.ipynb

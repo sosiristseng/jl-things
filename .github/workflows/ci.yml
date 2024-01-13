@@ -16,89 +16,20 @@ env:
   EXTRA_ARGS: ''   # Extra arguments for nbconvert
   PY_VER: '3.12'   # Python version
 
-jobs:
-  setup:
-    permissions:
-      packages: write
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-      hash: ${{ steps.img.outputs.hash }}
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    - name: Read Julia version
-      uses: SebRollen/toml-action@v1.0.2
-      id: read_toml
-      with:
-        file: 'Manifest.toml'
-        field: 'julia_version'
-    - name: Login to ghcr.io
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner	}}
-        password: ${{ github.token }}
-    - name: Get docker image hash
-      id: img
-      run: echo "hash=${{ hashFiles('requirements.txt', 'Project.toml', 'Manifest.toml', 'src/**', 'env.Dockerfile') }}" >> "$GITHUB_OUTPUT"
-    - name: Build Docker container
-      env:
-        IMG: ghcr.io/${{ github.repository }}:${{ steps.img.outputs.hash }}
-      run: |
-        docker manifest inspect ${IMG} && exit 0
-        docker build --build-arg JLVER=${{ steps.read_toml.outputs.value }} -f env.Dockerfile -t ${IMG} .
-        docker push ${IMG}
-    - name: List notebooks as a JSON array
-      id: set-matrix
-      working-directory: docs
-      run: echo "matrix=$(python -c 'import glob, json; print(json.dumps(glob.glob("**/*.ipynb", recursive=True)))')" >> "$GITHUB_OUTPUT"
+permissions:
+  packages: write
 
+jobs:
   execute:
-    needs: setup
     strategy:
-      max-parallel: 20
       fail-fast: false
       matrix:
-        # Notebooks need to be executed
-        notebook: ${{ fromJSON(needs.setup.outputs.matrix) }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Restore notebook if present
-        uses: actions/cache/restore@v3
-        id: nb-cache
-        with:
-          path: docs/${{ matrix.notebook }}
-          key: ${{ runner.os }}-notebook-${{ hashFiles(format('docs/{0}', matrix.notebook)) }}-${{ needs.setup.outputs.hash }}
-      - name: Pull docker image
-        if: ${{ steps.nb-cache.outputs.cache-hit != 'true' }}
-        run: docker pull ghcr.io/${{ github.repository }}:${{ needs.setup.outputs.hash }}
-      - name: Execute Notebook
-        if: ${{ steps.nb-cache.outputs.cache-hit != 'true' }}
-        run: >
-          docker run --rm -w /tmp -v ${{ github.workspace }}:/tmp
-          -e EXTRA_ARGS=${{ env.EXTRA_ARGS }}
-          -e TIMEOUT=${{ env.TIMEOUT }}
-          -e NOTEBOOK=${{ matrix.notebook }}
-          ghcr.io/${{ github.repository }}:${{ needs.setup.outputs.hash }}
-          bash ./execute.sh
-      - name: Cache notebook
-        uses: actions/cache/save@v3
-        if: ${{ steps.nb-cache.outputs.cache-hit != 'true' }}
-        with:
-          path: docs/${{ matrix.notebook }}
-          key: ${{ steps.nb-cache.outputs.cache-primary-key }}
-      - name: Convert artifact Name
-        id: art
-        run: echo "name=$(echo ${{ matrix.notebook }} | sed 's/\//-/g')" >> "$GITHUB_OUTPUT"
-      - name: Upload Notebook
-        uses: actions/upload-artifact@v4
-        with:
-          name: notebook-${{ steps.art.outputs.name }}
-          path: docs*/${{ matrix.notebook }}  # keep folder structure
-          retention-days: 1
+        section:
+          - pde
+          - ude
+    uses: ./.github/workflows/execute.yml
+    with:
+      dir: ${{ matrix.section }}
 
   render:
     needs: execute
