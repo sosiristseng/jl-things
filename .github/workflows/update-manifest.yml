@@ -23,6 +23,7 @@ jobs:
     strategy:
       matrix:
         dir:
+          - abm
           - pde
           - ude
       fail-fast: false
