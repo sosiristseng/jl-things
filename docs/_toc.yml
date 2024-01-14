@@ -4,6 +4,14 @@
 format: jb-book
 root: index
 parts:
+  - caption: Agent-based Models
+    chapters:
+    - file: abm/index
+    - file: abm/01-schelling
+    - file: abm/02-graph-sars2
+    - file: abm/03-flocking
+    - file: abm/04-social-distancing
+    - file: abm/05-zombie
   - caption: Partial DEs
     chapters:
     - file: pde/index
