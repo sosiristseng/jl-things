@@ -7,26 +7,32 @@ parts:
   - caption: Agent-based Models
     chapters:
     - file: abm/index
-    - file: abm/01-schelling
-    - file: abm/02-graph-sars2
-    - file: abm/03-flocking
-    - file: abm/04-social-distancing
-    - file: abm/05-zombie
-  - caption: Partial DEs
+      sections:
+      - file: abm/01-schelling
+      - file: abm/02-graph-sars2
+      - file: abm/03-flocking
+      - file: abm/04-social-distancing
+      - file: abm/05-zombie
+  - caption: Differential Equations
     chapters:
+    - file: diffeq/index
+      sections:
+      - file: ch01-01-ode
+      - file: ch01-02-sde
     - file: pde/index
-    - file: pde/pde-01-sis
-    - file: pde/pde-02-heat
-    - file: pde/pde-03-brusselator
-  - caption: Neural DEs
-    chapters:
+      sections:
+      - file: pde/pde-01-sis
+      - file: pde/pde-02-heat
+      - file: pde/pde-03-brusselator
     - file: ude/index
-    - file: ude/ude-01-firstexample
-    - file: ude/ude-02-multishooting
-    - file: ude/ude-03-neuralode
-    - file: ude/ude-04-poission
+      sections:
+      - file: ude/ude-01-firstexample
+      - file: ude/ude-02-multishooting
+      - file: ude/ude-03-neuralode
+      - file: ude/ude-04-poission
   - caption: Visualization
     chapters:
     - file: visual/index
-    - file: visual/plotsjl-gallery
-    - file: visual/pyplot-gizmaa
+      sections:
+      - file: visual/plotsjl-gallery
+      - file: visual/pyplot-gizmaa
