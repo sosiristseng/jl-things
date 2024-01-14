@@ -25,3 +25,8 @@ parts:
     - file: ude/ude-02-multishooting
     - file: ude/ude-03-neuralode
     - file: ude/ude-04-poission
+  - caption: Visualization
+    chapters:
+    - file: visual/index
+    - file: visual/plotsjl-gallery
+    - file: visual/pyplot-gizmaa

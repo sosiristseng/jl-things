@@ -26,6 +26,7 @@ jobs:
           - abm
           - pde
           - ude
+          - visual
     uses: ./.github/workflows/execute.yml
     with:
       dir: ${{ matrix.section }}
