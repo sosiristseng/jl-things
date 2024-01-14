@@ -23,6 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         section:
+          - abm
           - pde
           - ude
     uses: ./.github/workflows/execute.yml
