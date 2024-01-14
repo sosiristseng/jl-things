@@ -12,8 +12,6 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  TIMEOUT: '-1'    # nbconvert timeout
-  EXTRA_ARGS: ''   # Extra arguments for nbconvert
   PY_VER: '3.12'   # Python version
 
 permissions:
