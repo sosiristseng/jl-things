@@ -63,7 +63,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Restore notebook if present
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         id: nb-cache
         with:
           path: docs/${{ inputs.dir }}/${{ matrix.notebook }}
@@ -81,7 +81,7 @@ jobs:
           ghcr.io/${{ github.repository }}:${{ needs.setup.outputs.hash }}
           bash ./execute.sh
       - name: Cache notebook
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
         if: ${{ steps.nb-cache.outputs.cache-hit != 'true' }}
         with:
           path: docs/${{ inputs.dir }}/${{ matrix.notebook }}
