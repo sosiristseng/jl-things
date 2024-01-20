@@ -88,9 +88,9 @@ weakdeps = ["SparseArrays"]
 
 [[deps.Clustering]]
 deps = ["Distances", "LinearAlgebra", "NearestNeighbors", "Printf", "Random", "SparseArrays", "Statistics", "StatsBase"]
-git-tree-sha1 = "407f38961ac11a6e14b2df7095a2577f7cb7cb1b"
+git-tree-sha1 = "9ebb045901e9bbf58767a9f34ff89831ed711aae"
 uuid = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
-version = "0.15.6"
+version = "0.15.7"
 
 [[deps.CodecZlib]]
 deps = ["TranscodingStreams", "Zlib_jll"]
@@ -264,9 +264,9 @@ version = "4.4.4+1"
 
 [[deps.FFTW]]
 deps = ["AbstractFFTs", "FFTW_jll", "LinearAlgebra", "MKL_jll", "Preferences", "Reexport"]
-git-tree-sha1 = "ec22cbbcd01cba8f41eecd7d44aac1f23ee985e3"
+git-tree-sha1 = "4820348781ae578893311153d69049a93d05f39d"
 uuid = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
-version = "1.7.2"
+version = "1.8.0"
 
 [[deps.FFTW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -605,9 +605,9 @@ version = "2024.0.0+0"
 
 [[deps.MacroTools]]
 deps = ["Markdown", "Random"]
-git-tree-sha1 = "b211c553c199c111d998ecdaf7623d1b89b69f93"
+git-tree-sha1 = "2fa9ee3e63fd3a4f7a9a4f4744a52f4856de82df"
 uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
-version = "0.5.12"
+version = "0.5.13"
 
 [[deps.Markdown]]
 deps = ["Base64"]
