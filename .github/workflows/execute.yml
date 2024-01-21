@@ -22,12 +22,10 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    - name: Read Julia version
-      uses: SebRollen/toml-action@v1.0.2
-      id: read_toml
       with:
-        file: 'docs/${{ inputs.dir }}/Manifest.toml'
-        field: 'julia_version'
+        sparse-checkout: |
+          .github
+          docs/${{ inputs.dir }}
     - name: Login to ghcr.io
       uses: docker/login-action@v3
       with:
@@ -36,14 +34,13 @@ jobs:
         password: ${{ github.token }}
     - name: Get docker image hash
       id: img
-      working-directory: docs/${{ inputs.dir }}
-      run: echo "hash=${{ hashFiles(format('docs/{0}/requirements.txt', inputs.dir), format('docs/{0}/Manifest.toml', inputs.dir)) }}" >> "$GITHUB_OUTPUT"
+      run: echo "hash=${{ hashFiles('**/requirements.txt', '**/Manifest.toml', 'env.Dockerfile') }}" >> "$GITHUB_OUTPUT"
     - name: Build Docker container
       env:
         IMG: ghcr.io/${{ github.repository }}:${{ steps.img.outputs.hash }}
       run: |
         docker manifest inspect ${IMG} && exit 0
-        docker build --build-arg JLVER=${{ steps.read_toml.outputs.value }} -f env.Dockerfile -t ${IMG} docs/${{ inputs.dir }}
+        docker build -f env.Dockerfile -t ${IMG} docs/${{ inputs.dir }}
         docker push ${IMG}
     - name: List notebooks as a JSON array
       id: set-matrix
