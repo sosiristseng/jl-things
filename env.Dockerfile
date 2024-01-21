@@ -1,5 +1,4 @@
-ARG JLVER=1
-FROM julia:${JLVER} as julia
+FROM julia:1.10.0 as julia
 FROM python:3.12.1-slim as base
 
 # Julia config
