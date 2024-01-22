@@ -72,7 +72,7 @@ jobs:
         run: >
           docker run --rm -w /tmp -v ${{ github.workspace }}:/tmp
           ${{ env.IMG }}
-          julia --project=docs/${{ inputs.dir }} --color=yes -- build.jl docs/${{ inputs.dir }}/${{ matrix.notebook }}
+          julia --project=docs/${{ inputs.dir }} --color=yes -- literate.jl docs/${{ inputs.dir }}/${{ matrix.notebook }}
       - name: Convert artifact Name
         id: art
         run: echo "name=$(echo ${{ inputs.dir }}/${{ matrix.notebook }} | sed 's/\//-/g')" >> "$GITHUB_OUTPUT"
