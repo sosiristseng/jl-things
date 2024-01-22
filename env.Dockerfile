@@ -2,6 +2,7 @@ FROM julia:1.10.0 as julia
 FROM python:3.12.1-slim as base
 
 # Julia config
+ENV GKSwstype 100
 ENV JULIA_CI 'true'
 ENV JULIA_NUM_THREADS 'auto'
 # Let PythonCall use built-in python
@@ -16,10 +17,8 @@ FROM base
 WORKDIR /work
 
 # Python dependencies. e.g. matplotlib
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir matplotlib
 
 # Julia environment
 COPY Project.toml Manifest.toml ./
-RUN julia --color=yes -e 'using Pkg; Pkg.add(["IJulia"]); import IJulia; IJulia.installkernel("Julia", "--project=@.")' && \
-    julia --project=@. --color=yes -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
+RUN julia --color=yes -e 'using Pkg; Pkg.add(["Literate"]); Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()'
