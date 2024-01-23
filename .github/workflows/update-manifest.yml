@@ -36,7 +36,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Update Julia dependencies
+      - name: Build docker image
         run: |
           docker build --target	base -f env.Dockerfile -t ${IMG} docs/${{ matrix.dir }}
       - name: Update Julia dependencies
