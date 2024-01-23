@@ -24,6 +24,7 @@ jobs:
       matrix:
         section:
           - abm
+          - df
           - diffeq
           - pde
           - ude

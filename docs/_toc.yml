@@ -38,6 +38,23 @@ parts:
       - file: ude/02-multishooting
       - file: ude/03-neuralode
       - file: ude/04-poission
+  - caption: DataFrames
+    chapters:
+    - file: df/index
+      sections:
+      - file: df/01_constructors
+      - file: df/02_basicinfo
+      - file: df/03_missingvalues
+      - file: df/04_loadsave
+      - file: df/05_columns
+      - file: df/06_rows
+      - file: df/07_factors
+      - file: df/08_joins
+      - file: df/09_reshaping
+      - file: df/10_transforms
+      - file: df/11_performance
+      - file: df/12_pitfalls
+      - file: df/13_extras
   - caption: Visualization
     chapters:
     - file: visual/index
