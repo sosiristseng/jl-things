@@ -20,16 +20,10 @@ jobs:
   linkcheck:
     env:
       DIR: 'docs'
-      PY_VER: '3.12'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        id: cp
-        with:
-          python-version: ${{ env.PY_VER }}
       - name: Setup Julia
         uses: julia-actions/setup-julia@v1
       - name: Convert literate notebooks to markdown files
