@@ -43,23 +43,29 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: out/
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: out
       - name: Copy back built notebooks
         run: for d in out/notebook-*; do cp --verbose -rf "$d"/docs/* docs/; done
-      - name: Setup Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-      - name: Render Quarto Project
-        uses: quarto-dev/quarto-actions/render@v2
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        id: cp
         with:
-          to: html
-          path: docs
-      - name: Upload artifact for GH pages
-        uses: actions/upload-pages-artifact@v3
+          python-version: ${{ env.PY_VER }}
+      - name: Cache pip
+        uses: actions/cache@v4
+        id: cache-pip
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ runner.os }}-pip-${{ steps.cp.outputs.python-version }}-${{ hashFiles('requirements-jb.txt') }}
+      - name: Install python packages
+        if: ${{ steps.cache-pip.outputs.cache-hit != 'true' }}
+        run: pip install -r requirements-jb.txt
+      - name: Build website
+        run: jupyter-book build docs/
+      - name: Upload pages artifact
         if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: _site/
+          path: docs/_build/html/
 
   # CI conclusion for GitHub status check
   # Adaped from https://brunoscheufler.com/blog/2022-04-09-the-required-github-status-check-that-wasnt
