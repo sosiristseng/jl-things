@@ -50,7 +50,7 @@ end
 # Do not plot by default. Users could change doplot=true to see the plots callbacks
 callback = function (p, l, pred; doplot = false)
   println(l)
-  # plot current prediction against data
+  ## plot current prediction against data
   if doplot
     plt = scatter(tsteps, ode_data[1,:], label = "data")
     scatter!(plt, tsteps, pred[1,:], label = "prediction")
