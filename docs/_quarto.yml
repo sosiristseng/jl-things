@@ -8,7 +8,7 @@ website:
   back-to-top-navigation: true
   reader-mode: true
   sidebar:
-    style: "floating"
+    style: "docked"
     search: true
     contents: auto
 
