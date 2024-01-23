@@ -125,22 +125,22 @@ mumps = [20178, 23536, 34561, 37395, 36072, 32237, 18597, 9408, 6005, 6268, 8963
 chickenPox = [37140, 32169, 37533, 39103, 33244, 23269, 16737, 5411, 3435, 6052, 12825, 23332]
 ticklabel = string.(collect('A':'L'))
 
-md"""
+#===
 ### Grouped vertical bar plots
 
 Requires the `StatsPlots.jl` package.
 `groupedbar(data, bar_position = :dodge)`
-"""
+===#
 
 fig = groupedbar([measles mumps chickenPox], bar_position = :dodge, bar_width=0.7, xticks=(1:12, ticklabel), label=["measles" "mumps" "chickenPox"]);
 fig |> PNG
 
-md"""
+#===
 ### Stacked vertical bar plots
 
 Requires `StatsPlots` package.
 `groupedbar(data, bar_position = :stack)`
-"""
+===#
 
 fig = groupedbar([measles mumps chickenPox],
         bar_position = :stack,
@@ -190,11 +190,11 @@ english = rand(1:10, n)
 fig = boxplot([science english], label=["science" "english"]);
 fig |> PNG
 
-md"""
+#===
 ## Contour Plots
 ### Over a function
 `contour(xs, ys, f)` where `z = f(x, y)`
-"""
+===#
 
 using Plots
 
@@ -205,10 +205,10 @@ f = (x , y) -> x^2 + y^2
 fig = contour(xs, ys, f);
 fig |> PNG
 
-md"""
+#===
 ### Nullclines
 [Nullclines](https://en.wikipedia.org/wiki/Nullcline) (zero-growth isoclines) are curves where the derivative of one variable is zero. Nullclines are used to analyze evolution and stability of ODE systems.
-"""
+===#
 
 using Plots
 
@@ -228,20 +228,20 @@ zz = f.(xs', ys)
 fig = contour(xs, ys, zz);
 fig |> PNG
 
-md"""
+#===
 ### Filled Contour Plots
 + `contour(xs, ys, f, fill=true)`
 + `contourf(xs, ys, f)`
-"""
+===#
 
 fig = contour(0:0.01:5, 0:0.01:5, (x, y) -> sin(3x) * cos(x+y), xlabel="x", ylabel="y", fill=true);
 fig |> PNG
 
-md"""
+#===
 ## Datetime plot
 - Use `Dates` package and `Data` data type
 - Customize ticks
-"""
+===#
 
 using Plots
 using Dates
@@ -273,7 +273,8 @@ x = 0:0.1:2
 n = length(x)
 y = f.(x) + randn(n)
 
-fig = plot(x, y,
+fig = plot(
+    x, y,
     xerr=0.1 * rand(n),
     yerr=rand(n),
 	legend=nothing
@@ -287,9 +288,10 @@ using Plots
 a = rand(5,5)
 xlabel = string.(collect('A':'E'))
 ylabel = string.(collect('a':'e'))
-fig = heatmap(a, xticks=(1:5, xlabel),
-           yticks=(1:5, ylabel),
-           aspect_ratio=:equal
+fig = heatmap(
+    a, xticks=(1:5, xlabel),
+    yticks=(1:5, ylabel),
+    aspect_ratio=:equal
 );
 fig |> PNG
 
@@ -300,3 +302,316 @@ ann = [(i,j, text(round(a[i,j], digits=2), fontsize, :white, :center)) for i in 
 
 annotate!(fig, ann, linecolor=:white);
 fig |> PNG
+
+#===
+## Line plots
+
+```julia
+using Plots
+plot(x, y)
+plot(f, xRange)
+plot(f, xMin, xMax)
+plot(x, [y1 y2])
+```
+===#
+
+using Plots
+
+## Data
+x = 0:0.1:2pi
+y1 = cos.(x)
+y2 = sin.(x)
+
+## Creating a plot in steps
+fig = plot(x, y1, color="blue", linewidth=3);
+plot!(fig, x, y2, color="red", line=:dash);
+title!(fig, "Trigonometric functions");
+xlabel!(fig, "angle");
+ylabel!(fig, "sin(x) and cos(x)");
+plot!(fig, xlims=(0,2pi), ylims=(-2, 2), size=(600, 600));
+
+fig |> PNG
+
+#---
+fig = plot(x, y1, line=(:blue, 3));
+plot!(fig, x, y2, line=(:dash, :red));
+## One set function to rule them all
+plot!(fig,
+    title="Trigonometric functions",
+    xlabel="angle",
+    ylabel="sin(x) and cos(x)",
+    xlims=(0,2pi), ylims=(-2, 2), size=(600, 600)
+);
+
+fig |> PNG
+
+#===
+### Plotting multiple series
+
++ Rows = observations
++ Columns = species
+===#
+
+time = 30
+walker1 = cumsum(randn(time))
+walker2 = cumsum(randn(time))
+walker3 = cumsum(randn(time))
+walker4 = cumsum(randn(time))
+walker5 = cumsum(randn(time))
+fig = plot(1:time, [walker1 walker2 walker3 walker4 walker5],
+    xlabel="time", ylabel="position",
+    label=["walker1" "walker2" "walker3" "walker4" "walker5"],
+    legend=:topleft
+);
+
+fig |> PNG
+
+#===
+### Parameteric plots
+
+Functions can be plotted directly.
+
++ `plot(f, xmin, xmax)`
++ `plot(f, range_of_x)`
++ `plot(fx(t), fy(t), range_of_t)`
+===#
+
+let
+    f = x -> 5exp(-x^2)
+    g = x -> x^2
+    plot([f, g], -3, 3, label=["f" "g"], legend=:top)
+end |> PNG
+#---
+plot(sin, t->sin(2t), 0, 2π, leg=false, fill=(0,:orange)) |> PNG
+
+#===
+### 3D line plot
+
+Similar to 2D line plots.
+
+`plot(fx(t), fy(t), fz(t), tmin, tmax [, kwargs...])`
+===#
+
+plot(cos, sin, t -> sin(5t), 0, 2pi, legend=nothing) |> PNG
+
+# ## Line colors
+# `plot(x, y, c=color)`
+
+using Plots
+using SpecialFunctions
+
+x = 0:0.2:10
+y0 = besselj.(0,x)
+y1 = besselj.(1,x)
+y2 = besselj.(2,x)
+y3 = besselj.(3,x)
+y4 = besselj.(4,x)
+y5 = besselj.(5,x)
+y6 = besselj.(6,x)
+colors = [:red :green :blue :cyan :magenta :yellow :black]
+plot(x, [y0 y1 y2 y3 y4 y5 y6], c=colors) |> PNG
+
+# ### Line styles
+using Plots
+@show Plots.supported_styles()
+
+#---
+style = Plots.supported_styles()[2:end]
+style = reshape(style, 1, length(style))
+plot(x, [y0 y1 y2 y3 y4], line=(3, style)) |> PNG
+
+# ## Polar Plots
+# `plot(θ, r, proj=:polar)`
+
+plot(θ -> 1 + cos(θ) * sin(θ)^2, 0, 2π, proj=:polar, lims=(0, 1.5)) |> PNG
+
+# ### Rose Plots
+# `plot(..., proj=:polar, line=:steppre)`
+
+n = 24
+R = rand(n+1)
+plot(0:2pi/n:2pi, R, proj=:polar, line=:steppre, lims=(0, 1), legend=nothing) |> PNG
+
+#===
+## Quiver Plots
++ `quiver(x1d, y1d, quiver=(vx1d, vy1d)`
++ `quiver(x2d, y2d, quiver=(x, y)->(u, v))`
+===#
+
+using Plots
+
+n = 7
+f = (x,y) -> hypot(x, y) |> inv
+
+x = repeat(-3:(2*3)/n:3, 1, n) |> vec
+y = repeat(-3:(2*3)/n:3, 1, n)' |> vec
+vx = f.(x,y) .* cos.(atan.(y,x)) |> vec
+vy = f.(x,y) .* sin.(atan.(y,x)) |> vec
+quiver(x, y, quiver=(vx, vy), aspect_ratio=:equal) |> PNG
+
+
+#---
+g = (x, y) -> [f(x,y) * cos(atan(y,x)), f(x,y) * sin(atan(y,x))]
+xx = [x for y in -3:(2*3)/n:3, x in -3:(2*3)/n:3]
+yy = [y for y in -3:(2*3)/n:3, x in -3:(2*3)/n:3]
+quiver(xx, yy, quiver=g, aspect_ratio=:equal, color=:black) |> PNG
+
+# ## Scatter Plots
+# 2D Scatter Plots: `scatter(xpos, ypos)`
+
+using Plots
+
+n = 50
+x = rand(n)
+y = rand(n)
+ms = rand(50) * 30
+scatter(x, y, markersize=ms) |> PNG
+
+# 3D Scatter Plots: `scatter(xpos, ypos, zpos)`
+scatter(x, y, rand(n), markersize=ms) |> PNG
+
+# ## Stairstep plot
+# `plot(..., line=:steppre)`
+plot(sin.(0:0.3:2pi), line=:steppre, label="Steps") |> PNG
+
+#===
+## Stem plot
+
+A.k.a lolipop plot.
+
+`plot(..., line=:stem)`
+===#
+
+plot(sin.(0:0.3:2pi), line=:stem, marker=:star, markersize=20, ylims=(-1.1, 1.1), label="Stars") |> PNG
+
+#===
+## Subplots
+
++ `plot(p1, p2, p3, ...)`
++ `plot(..., layout=(nrow, ncol))`
++ `plot(..., layout=@layout [...])`
+
+[Source](https://docs.juliaplots.org/latest/layouts/)
+===#
+
+using Plots
+data = rand(100, 4)
+
+# create a 2x2 grid, and map each of the 4 series to one of the subplots
+plot(data, layout = 4) |> PNG
+
+# More complex grid layouts can be created with the grid(...) constructor:
+plot(data, layout = grid(4, 1, heights=[0.1 ,0.4, 0.4, 0.1])) |> PNG
+
+# Adding titles and labels
+plot(data, layout = 4, label=["a" "b" "c" "d"], title=["1" "2" "3" "4"]) |> PNG
+
+# Using the `@layout` macro
+l = @layout [
+    a{0.3w} [grid(3,3)
+             b{0.2h}  ]
+]
+
+fig = plot(
+    rand(10, 11),
+    layout = l, legend = false, seriestype = [:bar :scatter :path],
+    title = ["($i)" for j in 1:1, i in 1:11], titleloc = :right, titlefont = font(8)
+);
+fig |> PNG
+
+# Use _ to ignore a spot in the layout
+fig = plot((plot() for i in 1:7)..., layout=@layout([_ ° _; ° ° °; ° ° °]));
+fig |> PNG
+
+# ### Build subplots one by one
+p1 = plot(sin, 0, 2pi, xlabel="x1");
+p2 = plot(cos, 0, 2pi, xlabel="x2");
+p3 = histogram(randn(1000), xlabel="x3");
+p4 = plot(x->exp(-x^2), -3, 3, xlabel="x4");
+fig = plot(p1, p2, p3, p4);
+fig |> PNG
+
+#===
+## Surface plots
+
++ `surface(x, y, z)`
++ `surface(x, y, (x,y)->z)`
++ `plot(x, y, z, linetype=:surface)`
++ `plot(x, y, z, linetype=:wireframe)`
+===#
+using Plots
+
+x = y = -10:10
+f = (x , y) -> x^2 + y^2
+
+surface(x, y, f) |> PNG
+
+# surface style
+plot(x, y, f, linetype=:surface) |> PNG
+
+# wireframe style
+plot(x, y, f, linetype=:wireframe) |> PNG
+
+# ## Twin Y Axis
+# `plot!(twinx())`
+
+using Plots
+
+fig = plot(randn(100), ylabel="y1", leg=:topright);
+
+plot!(fig,
+    twinx(), randn(100)*10,
+    c=:red,
+    ylabel="y2",
+    leg=:bottomright,
+    size=(600, 400)
+);
+
+plot!(fig, right_margin=15Plots.mm)
+fig |> PNG
+
+# ## Animations
+# `@animate` for loops
+
+using Plots
+
+# define the Lorenz attractor
+Base.@kwdef mutable struct Lorenz
+    dt::Float64 = 0.02
+    σ::Float64 = 10
+    ρ::Float64 = 28
+    β::Float64 = 8/3
+    x::Float64 = 1
+    y::Float64 = 1
+    z::Float64 = 1
+end
+
+function step!(l::Lorenz)
+    dx = l.σ * (l.y - l.x)
+    dy = l.x * (l.ρ - l.z) - l.y
+    dz = l.x * l.y - l.β * l.z
+    l.x += l.dt * dx
+    l.y += l.dt * dy
+    l.z += l.dt * dz
+end
+
+attractor = Lorenz()
+
+# initialize a 3D plot with one empty series
+
+plt = plot3d(
+    1,
+    xlim = (-30, 30),
+    ylim = (-30, 30),
+    zlim = (0, 60),
+    title = "Lorenz Attractor",
+    marker = 2,
+)
+
+# pushing new points to the plot
+anim = @animate for i=1:1500
+    step!(attractor)
+    push!(plt, attractor.x, attractor.y, attractor.z)
+end
+
+mp4(anim, fps = 15)
