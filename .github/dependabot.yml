@@ -6,12 +6,6 @@ updates:
       interval: daily
     labels:
       - automerge
-  - package-ecosystem: pip
-    directory: "/"
-    schedule:
-      interval: daily
-    labels:
-      - automerge
   - package-ecosystem: docker
     directory: "/"
     schedule:
