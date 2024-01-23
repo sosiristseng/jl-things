@@ -3,3 +3,11 @@ title: "Julia things"
 ---
 
 Things about the Julia programming language.
+
+## Topics
+
+- Agent-based modeling
+- Differential equations
+- DataFrames usage
+- Visualizations
+- etc
