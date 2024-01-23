@@ -559,15 +559,14 @@ using Plots
 
 fig = plot(randn(100), ylabel="y1", leg=:topright);
 
-plot!(fig,
-    twinx(), randn(100)*10,
+plot!(twinx(fig), randn(100)*10,
     c=:red,
     ylabel="y2",
     leg=:bottomright,
     size=(600, 400)
 );
 
-plot!(fig, right_margin=15Plots.mm)
+plot!(fig, right_margin=15Plots.mm);
 fig |> PNG
 
 # ## Animations
