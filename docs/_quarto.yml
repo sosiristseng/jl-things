@@ -17,10 +17,6 @@ format:
     theme:
       light: flatly
       dark: darkly
-    grid:
-      body-width: 1000px
-      sidebar-width: 300px
-      margin-width: 300px
-    # css: styles.css
+    css: styles.css
     toc: true
     html-math-method: mathjax
