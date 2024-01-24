@@ -38,7 +38,7 @@ parts:
       - file: ude/02-multishooting
       - file: ude/03-neuralode
       - file: ude/04-poission
-  - caption: DataFrames
+  - caption: Data Science
     chapters:
     - file: df/index
       sections:
