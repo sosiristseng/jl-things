@@ -23,12 +23,12 @@ jobs:
     strategy:
       matrix:
         dir:
-          - agent-based-modeling
-          - dataframes
-          - differential-equations
+          - abm
+          - df
+          - diffeq
           - pde
-          - neural-pde
-          - visualization
+          - ude
+          - visual
       fail-fast: false
     permissions:
       contents: write

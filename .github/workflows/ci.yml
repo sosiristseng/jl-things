@@ -23,12 +23,12 @@ jobs:
       fail-fast: false
       matrix:
         section:
-          - agent-based-modeling
-          - dataframes
-          - differential-equations
+          - abm
+          - df
+          - diffeq
           - pde
-          - neural-pde
-          - visualization
+          - ude
+          - visual
     uses: ./.github/workflows/execute.yml
     with:
       dir: ${{ matrix.section }}
@@ -53,20 +53,14 @@ jobs:
           cache: 'pip'
       - name: Install python packages
         run: pip install -r requirements.txt
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v4
       - name: Build website
-        env:
-          SITE_URL: ${{ steps.pages.outputs.base_url }}
-          REPO_URL: ${{ github.server_url	}}/${{ github.repository }}
-          REPO_NAME: ${{ github.repository }}
-        run: mkdocs build
-      - name: Upload pages artifact
+        run: jupyter-book build docs/
+      - name: Upload page artifact
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./site
+          path: docs/_build/html
+
   # CI conclusion for GitHub status check
   # Adaped from https://brunoscheufler.com/blog/2022-04-09-the-required-github-status-check-that-wasnt
   CI:

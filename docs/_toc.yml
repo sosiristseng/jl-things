@@ -1,0 +1,61 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: index
+parts:
+  - caption: Agent-based Models
+    chapters:
+    - file: abm/index
+      sections:
+      - file: abm/01-schelling
+      - file: abm/02-graph-sars2
+      - file: abm/03-flocking
+      - file: abm/04-social-distancing
+      - file: abm/05-zombie
+  - caption: Differential Equations
+    chapters:
+    - file: diffeq/index
+      sections:
+      - file: diffeq/ch01-01-ode
+      - file: diffeq/ch01-02-sde
+      - file: diffeq/ch01-03-ensemble
+      - file: diffeq/ch01-04-paramestim
+      - file: diffeq/ch01-05-callback
+      - file: diffeq/ch02-01-symbolics
+      - file: diffeq/ch02-02-modelingptoolkit
+      - file: diffeq/ch02-03-catalyst
+      - file: diffeq/ch02-04-optimization
+      - file: diffeq/ch03-01-neuron
+    - file: pde/index
+      sections:
+      - file: pde/01-sis
+      - file: pde/02-heat
+      - file: pde/03-brusselator
+    - file: ude/index
+      sections:
+      - file: ude/01-firstexample
+      - file: ude/02-multishooting
+      - file: ude/03-neuralode
+      - file: ude/04-poission
+  - caption: DataFrames
+    chapters:
+    - file: df/index
+      sections:
+      - file: df/01_constructors
+      - file: df/02_basicinfo
+      - file: df/03_missingvalues
+      - file: df/04_loadsave
+      - file: df/05_columns
+      - file: df/06_rows
+      - file: df/07_factors
+      - file: df/08_joins
+      - file: df/09_reshaping
+      - file: df/10_transforms
+      - file: df/11_performance
+      - file: df/12_pitfalls
+      - file: df/13_extras
+  - caption: Visualization
+    chapters:
+    - file: visual/plotsjl-gallery
+    - file: visual/pyplot-gizmaa
