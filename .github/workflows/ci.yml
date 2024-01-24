@@ -11,9 +11,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  PY_VER: '3.12'   # Python version
-
 permissions:
   packages: write
 
@@ -45,22 +42,18 @@ jobs:
           path: out/
       - name: Copy back built notebooks
         run: for d in out/notebook-*; do cp --verbose -rf "$d"/docs/* docs/; done
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        id: cp
+      - name: Setup Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+      - name: Render Quarto Project
+        uses: quarto-dev/quarto-actions/render@v2
         with:
-          python-version: ${{ env.PY_VER }}
-          cache: 'pip'
-          cache-dependency-path: 'requirements-jb.txt'
-      - name: Install python packages
-        run: pip install -r requirements-jb.txt
-      - name: Build website
-        run: jupyter-book build docs/
+          to: html # If set, it will be equivalent to `quarto render --to html`
+          path: docs # By default, the current working dir is used i.e `quarto render .`
       - name: Upload pages artifact
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-pages-artifact@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
         with:
-          path: docs/_build/html/
+          path: _site/
 
   # CI conclusion for GitHub status check
   # Adaped from https://brunoscheufler.com/blog/2022-04-09-the-required-github-status-check-that-wasnt
