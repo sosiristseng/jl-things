@@ -1,5 +1,5 @@
-#  # DataFrames Extras
-#   Selected functionalities/packages
+# # DataFrames Extras
+# Selected functionalities/packages
 
 using DataFrames
 using CategoricalArrays

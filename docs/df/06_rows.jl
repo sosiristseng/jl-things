@@ -1,5 +1,5 @@
-#   # Manipulating rows of DataFrame
-#   ## Selecting rows
+# # Manipulating rows of DataFrame
+# ## Selecting rows
 
 using DataFrames
 using Statistics
