@@ -57,7 +57,5 @@ parts:
       - file: df/13_extras
   - caption: Visualization
     chapters:
-    - file: visual/index
-      sections:
-      - file: visual/plotsjl-gallery
-      - file: visual/pyplot-gizmaa
+    - file: visual/plotsjl-gallery
+    - file: visual/pyplot-gizmaa
