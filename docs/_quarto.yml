@@ -25,3 +25,4 @@ format:
     grid:
       sidebar-width: 350px
     toc: true
+    number-sections: true
