@@ -51,6 +51,7 @@ jobs:
         with:
           python-version: ${{ env.PY_VER }}
           cache: 'pip'
+          cache-dependency-path: 'requirements-jb.txt'
       - name: Install python packages
         run: pip install -r requirements-jb.txt
       - name: Build website
