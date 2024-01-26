@@ -77,7 +77,7 @@ end
 
 # Solve the problem.
 res = Optimization.solve(prob, alg, callback = callback, maxiters=1500)
-plot(larr, xlabel="Iters", ylabel="Loss", yscale=:log10, lab=false) |> PNG
+plot(larr, xlabel="Iters", title="Loss", yscale=:log10, lab="Loss") |> PNG
 
 # Plot the predicted solution of the PDE and compare it with the analytical solution to see the relative error.
 xs, ys = [infimum(d.domain):dx/10:supremum(d.domain) for d in domains]
