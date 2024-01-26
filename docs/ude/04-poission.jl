@@ -17,6 +17,10 @@ u(x, 0) &= 0 \\
 u(x, 1) &= 0 \\
 \end{align}
 $$
+
+where
+
+$x ∈ [0, 1], y ∈ [0, 1]$
 """
 
 using NeuralPDE
@@ -42,13 +46,13 @@ bcs = [
     u(x, 0) ~ 0.0, u(x, 1) ~ 0.0
 ]
 
-# Space and time domains
+# Space domains
 domains = [
     x ∈ Interval(0.0, 1.0),
     y ∈ Interval(0.0, 1.0)
 ]
 
-# Build a Neural Network for the NPDE solver.
+# Build a neural network for the PDE solver.
 dim = 2
 chain = Lux.Chain(Dense(dim, 16, Lux.σ), Dense(16, 16, Lux.σ), Dense(16, 1))
 
@@ -56,31 +60,27 @@ chain = Lux.Chain(Dense(dim, 16, Lux.σ), Dense(16, 16, Lux.σ), Dense(16, 1))
 dx = 0.05
 discretization = PhysicsInformedNN(chain, GridTraining(dx))
 
-# Next we build our PDE system and discretize it. Because this system is time-invariant, the corresponding problem is an `OptimizationProblem`.
+# Next we build our PDE system and discretize it.
+# Because this system is time-invariant, the corresponding problem is an `OptimizationProblem`.
 @named pde_system = PDESystem(eq, bcs, domains, [x, y], [u(x, y)])
 prob = discretize(pde_system, discretization)
 
 # The callback function records the loss value.
-opt = OptimizationOptimJL.BFGS()
-larr = Vector{Float64}()
-callback = function (p,l)
+alg = OptimizationOptimJL.BFGS()
+
+# Callback function
+larr = Float64[]
+callback = function (p, l)
     push!(larr, l)
     return false
 end
 
 # Solve the problem.
-res = Optimization.solve(prob, opt, callback = callback, maxiters=1500)
-
-#---
-larr[end]
-
-#---
-fig = plot(larr, xlabel="# Iterations", label="Loss", yscale=:log10, xlims=(0, 1500));
-fig |> PNG
+res = Optimization.solve(prob, alg, callback = callback, maxiters=1500)
+plot(larr, xlabel="Iters", ylabel="Loss", yscale=:log10, lab=false) |> PNG
 
 # Plot the predicted solution of the PDE and compare it with the analytical solution to see the relative error.
-xs,ys = [infimum(d.domain):dx/10:supremum(d.domain) for d in domains]
-
+xs, ys = [infimum(d.domain):dx/10:supremum(d.domain) for d in domains]
 analytic_sol_func(x,y) = (sinpi(x)*sinpi(y))/(2pi^2)
 
 phi = discretization.phi
@@ -91,6 +91,4 @@ diff_u = abs.(u_predict .- u_real)
 p1 = plot(xs, ys, u_real, linetype=:contourf, title = "analytic");
 p2 = plot(xs, ys, u_predict, linetype=:contourf, title = "predict");
 p3 = plot(xs, ys, diff_u, linetype=:contourf, title = "error");
-fig = plot(p1, p2, p3);
-
-fig |> PNG
+plot(p1, p2, p3) |> PNG
