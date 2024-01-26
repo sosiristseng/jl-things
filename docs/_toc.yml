@@ -22,6 +22,7 @@ parts:
       - file: diffeq/ch01-03-ensemble
       - file: diffeq/ch01-04-paramestim
       - file: diffeq/ch01-05-callback
+      - file: diffeq/ch01-06-tips
       - file: diffeq/ch02-01-symbolics
       - file: diffeq/ch02-02-modelingptoolkit
       - file: diffeq/ch02-03-catalyst
