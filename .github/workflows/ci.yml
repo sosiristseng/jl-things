@@ -43,6 +43,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: out/
+      - name: Display artifact sturcture
+        run: tree out/
       - name: Copy back built notebooks
         run: for d in out/notebook-*; do cp --verbose -rf "$d"/docs/* docs/; done
       - name: Setup Python
