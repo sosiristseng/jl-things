@@ -88,5 +88,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: notebook-${{ steps.art.outputs.name }}
-          path: docs/${{ inputs.dir }}/${{ matrix.notebook }}  # keep folder structure
+          path: docs*/${{ inputs.dir }}/${{ matrix.notebook }}  # keep folder structure
           retention-days: 1
