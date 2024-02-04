@@ -78,6 +78,7 @@ jobs:
           docs/${{ inputs.dir }}/${{ matrix.notebook }}
       - name: Save built notebook
         uses: actions/cache/save@v4
+        if: ${{ steps.nb-cache.outputs.cache-hit != 'true' }}
         with:
           path: docs/${{ inputs.dir }}/${{ matrix.notebook }}
           key: ${{ steps.nb-cache.outputs.cache-primary-key }}
