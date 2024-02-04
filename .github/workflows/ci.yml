@@ -43,6 +43,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: out/
+      - name: Display artifact sturcture
+        run: tree out/
       - name: Copy back built notebooks
         run: for d in out/notebook-*; do cp --verbose -rf "$d"/docs/* docs/; done
       - name: Setup Python
@@ -58,7 +60,7 @@ jobs:
           path: ${{ env.pythonLocation }}
           key:  ${{ runner.os }}-pip-${{ steps.cp.outputs.python-version }}-${{ hashFiles('requirements.txt') }}
       - name: Install pip dependencies if cache miss
-        if: steps.cache-py.outputs.cache-hit != 'true'
+        if: ${{ steps.cache-py.outputs.cache-hit != 'true' }}
         run: pip install -r requirements.txt
       - name: Build website
         run: jupyter-book build docs/

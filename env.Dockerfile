@@ -17,8 +17,8 @@ FROM base
 WORKDIR /work
 
 # Python dependencies. e.g. matplotlib
-RUN pip install --no-cache-dir matplotlib
+RUN pip install --no-cache-dir matplotlib nbconvert
 
 # Julia environment
 COPY Project.toml Manifest.toml ./
-RUN julia --color=yes -e 'using Pkg; Pkg.add(["Literate"]); Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()'
+RUN julia --color=yes -e 'using Pkg; Pkg.add(["IJulia"]); Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()'
