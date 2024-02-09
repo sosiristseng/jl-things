@@ -11,6 +11,6 @@ updates:
   - package-ecosystem: docker
     directory: "/"
     schedule:
-      interval: dailY
+      interval: daily
     labels:
       - automerge
