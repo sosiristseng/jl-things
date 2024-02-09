@@ -41,7 +41,7 @@ jobs:
     - name: List notebooks as a JSON array
       id: set-matrix
       working-directory: docs/${{ inputs.dir }}
-      run: echo "matrix=$(python -c 'import glob, json, os; print(json.dumps(glob.glob("**/*.ipynb", recursive=True)))')" >> "$GITHUB_OUTPUT"
+      run: echo "matrix=$(python -c 'import glob, json, os; print(json.dumps(glob.glob("**/*.jl", recursive=True)))')" >> "$GITHUB_OUTPUT"
 
   execute:
     needs: setup
@@ -61,27 +61,18 @@ jobs:
           sparse-checkout: |
             .github
             docs/${{ inputs.dir }}
-      - name: Restore built notebook
-        uses: actions/cache/restore@v4
+      - name: Cache built notebook
+        uses: actions/cache@v4
         id: nb-cache
         with:
-          path: docs/${{ inputs.dir }}/${{ matrix.notebook }}
+          path: docs/${{ inputs.dir }}/**/*.ipynb
           key: ${{ runner.os }}-notebook-${{ hashFiles(format('docs/{0}/{1}', inputs.dir, matrix.notebook)) }}-${{ needs.setup.outputs.hash }}
       - name: Execute Notebook
         if: ${{ steps.nb-cache.outputs.cache-hit != 'true' }}
         run: >
           docker run --rm -w /tmp -v ${{ github.workspace }}:/tmp
           ${{ env.IMG }}
-          jupyter nbconvert --to notebook --execute --inplace
-          --ExecutePreprocessor.timeout=-1
-          --ExecutePreprocessor.kernel_name=$(julia -e 'print("julia-1.",VERSION.minor)')
-          docs/${{ inputs.dir }}/${{ matrix.notebook }}
-      - name: Save built notebook
-        uses: actions/cache/save@v4
-        if: ${{ steps.nb-cache.outputs.cache-hit != 'true' }}
-        with:
-          path: docs/${{ inputs.dir }}/${{ matrix.notebook }}
-          key: ${{ steps.nb-cache.outputs.cache-primary-key }}
+          julia --project=docs/${{ inputs.dir }} --color=yes -- literate.jl docs/${{ inputs.dir }}/${{ matrix.notebook }}
       - name: Convert artifact Name
         id: art
         run: echo "name=$(echo ${{ inputs.dir }}/${{ matrix.notebook }} | sed 's/\//-/g')" >> "$GITHUB_OUTPUT"
@@ -89,5 +80,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: notebook-${{ steps.art.outputs.name }}
-          path: docs*/${{ inputs.dir }}/${{ matrix.notebook }}  # keep folder structure
+          path: docs*/${{ inputs.dir }}/**/*.ipynb  # keep folder structure
           retention-days: 1
