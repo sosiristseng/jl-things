@@ -64,7 +64,7 @@ fig = plot(sol, idxs=[x, f]);
 fig |> PNG
 
 # ## Second order ODE system
-# `ode_order_lowering(eqs)` can automatically transform a second-order ODE into two first-order ODEs.
+# `ode_order_lowering(sys)` can automatically transform a second-order ODE into two first-order ODEs.
 
 using Plots
 using ModelingToolkit
@@ -102,7 +102,7 @@ p = [
 tspan = (0.0, 100.0)
 prob = ODEProblem(sys, u0, tspan, p, jac=true)
 sol = solve(prob)
-fig = plot(sol, idxs=(x, y, z), label="Trajectory");
+fig = plot(sol, idxs=(x, y, z), label="Trajectory", size=(600,600));
 fig |> PNG
 
 # ## Composing systems
@@ -132,7 +132,7 @@ connections = [0 ~ lorenz1.x + lorenz2.y + a * γ]
 
 @named connLorenz = ODESystem(connections, t , [a], [γ], systems = [lorenz1, lorenz2])
 
-#---
+# All state variables in the combined system
 states(connLorenz)
 
 #---
@@ -149,7 +149,8 @@ p = [
 ]
 
 tspan = (0.0, 100.0)
-fig = plot(solve(ODEProblem(connLorenz, u0, tspan, p), Rodas5()), idxs=(a, lorenz1.x, lorenz2.x));
+sol = solve(ODEProblem(connLorenz, u0, tspan, p, jac=true))
+fig = plot(sol, idxs=(a, lorenz1.x, lorenz2.x), size=(600,600));
 fig |> PNG
 
 md"""
@@ -189,15 +190,16 @@ pendulum_prob = ODEProblem(pendulum_fun!, u0, tspan, p)
 tracedSys = modelingtoolkitize(pendulum_prob)
 
 # `structural_simplify()` and `dae_index_lowering()` transform the index-3 DAE into an index-0 ODE.
-pendulumSys = structural_simplify(dae_index_lowering(tracedSys))
-
+pendulumSys = tracedSys |> dae_index_lowering |> structural_simplify
 # The default `u0` is included in the system already so one can use an empty array `[]` as the initial conditions.
 prob = ODAEProblem(pendulumSys, [], tspan)
 sol = solve(prob, abstol=1e-8, reltol=1e-8)
 fig = plot(sol, idxs=states(tracedSys));
 fig |> PNG
 
-# ## Solving non-linear systems
+fieldnames(typeof(sol))
+
+# ## Solving nonlinear systems
 # Use `NonlinearSolve.jl` and `NonlinearSystem()`
 
 using ModelingToolkit
@@ -220,7 +222,7 @@ ps = [σ => 10.0, ρ => 26.0, β => 8/3]
 prob = NonlinearProblem(ns, guess, ps)
 sol = solve(prob, NewtonRaphson()) ## Should be all zeroes
 
-# Another example
+# Another nonlinear system example with `structural_simplify()`
 @parameters t
 @variables u1(t) u2(t) u3(t) u4(t) u5(t)
 
@@ -235,14 +237,16 @@ eqs = [
 @named sys = NonlinearSystem(eqs, [u1, u2, u3, u4, u5], [])
 
 # You can simplify the problem using `structural_simplify()`
+# There will be only one state variable left. The solve can solve the problem faster.
 simple_sys = structural_simplify(sys)
 
 prob = NonlinearProblem(simple_sys, [u5=>0.0])
 sol = solve(prob, NewtonRaphson())
 
+# The answer should be 1.6 and 1.0
 @show sol[u5] sol[u1];  ## 1.6 and 1.0
 
-# ## Stochastic Differential Equations (SDEs) in MTK
+# ## Stochastic Differential Equations (SDEs)
 # Use `SDESystem(equations, noises, iv, dv, ps)`
 using ModelingToolkit
 using DifferentialEquations
@@ -253,21 +257,22 @@ using Plots
 
 D = Differential(t)
 
-eqs = [D(x) ~ σ * (y - x),
-       D(y) ~ x * (ρ - z) - y,
-       D(z) ~ x * y - β * z]
+eqs = [
+    D(x) ~ σ * (y - x),
+    D(y) ~ x * (ρ - z) - y,
+    D(z) ~ x * y - β * z
+]
 
+# Add a diagonal noise with 10% of the magnitude.
+noises = [0.1x, 0.1y, 0.1z]
 
-noises = [0.1x, 0.1y, 0.1z] ## diagonal noise, 10% of the magnitude of state variables.
-
-@named de = SDESystem(eqs, noises, t, [x, y, z], [σ,ρ,β])
+@named sys = SDESystem(eqs, noises, t, [x, y, z], [σ,ρ,β])
 
 #---
-
 u0 = [x => 10.0, y => 10.0, z=> 10.0]
 p = [σ => 10.0, ρ => 28.0, β => 8/3]
 tspan = (0.0, 200.0)
-prob = SDEProblem(de, u0, tspan, p)
+prob = SDEProblem(sys, u0, tspan, p)
 sol = solve(prob)
-fig = plot(sol, idxs=(x, y, z));
+fig = plot(sol, idxs=(1, 2, 3));
 fig |> PNG
