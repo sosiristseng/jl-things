@@ -125,7 +125,7 @@ sol[1, 2]
 # `sol[i, :]`: the timeseries for the `i`th component.
 sol[1, :]
 
-# `sol(t,idxs=1)`: the 1st element in time point(s) `t` with interpolation. `t` can be a scalar (single point) or an vector-like sequence. (multiple points)
+# `sol(t,idxs=1)`: the 1st element in time point(s) `t` with interpolation. `t` can be scalar or vector.
 sol(10, idxs=2)
 
 #---
@@ -144,9 +144,9 @@ $$
 \end{align}
 $$
 
-In this example, we will use [LabelledArrays.jl](https://github.com/SciML/LabelledArrays.jl) to get DSL-like syntax.
+In this example, we will use [ComponentArrays.jl](https://github.com/jonniedie/ComponentArrays.jl) to get DSL-like syntax.
 """
-using LabelledArrays
+using ComponentArrays
 using DifferentialEquations
 using Plots
 
@@ -158,16 +158,15 @@ function lorenz!(du,u,p,t)
 end
 
 #---
-u0 = LVector(x=1.0, y=0.0, z=0.0)
+u0 = ComponentArray(x=1.0, y=0.0, z=0.0)
 p = (σ=10.0, ρ=28.0, β=8/3)
 tspan = (0.0, 100.0)
 prob = ODEProblem(lorenz!, u0, tspan, p)
 sol = solve(prob)
 
-# `idxs=(1, 2, 3)` makes a phase plot with 1st, 2nd, and the 3rd state variable. With `LabelledArrays`, you can also use symbols instead of index numbers.
+# `idxs=(1, 2, 3)` makes a phase plot with 1st, 2nd, and the 3rd state variable.
 
-## Same as plot(sol, idxs=(1, 2, 3))
-fig = plot(sol, idxs=(:x, :y, :z));
+fig = plot(sol, idxs=(1, 2, 3));
 fig |> PNG
 
 # The plot recipe is using the interpolation to smooth the plot. You can turn off `denseplot` to see the difference.
