@@ -328,7 +328,7 @@ plot!(fig, x, y2, color="red", line=:dash);
 title!(fig, "Trigonometric functions");
 xlabel!(fig, "angle");
 ylabel!(fig, "sin(x) and cos(x)");
-plot!(fig, xlims=(0,2pi), ylims=(-2, 2), size=(600, 600));
+plot!(fig, xlims=(0,2pi), ylims=(-2, 2), size=(400, 400));
 
 fig |> PNG
 
@@ -340,7 +340,7 @@ plot!(fig,
     title="Trigonometric functions",
     xlabel="angle",
     ylabel="sin(x) and cos(x)",
-    xlims=(0,2pi), ylims=(-2, 2), size=(600, 600)
+    xlims=(0,2pi), ylims=(-2, 2), size=(400, 400)
 );
 
 fig |> PNG

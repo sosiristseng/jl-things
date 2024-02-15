@@ -44,7 +44,7 @@ Agents.abmvideo(
     model, agent_step!;
     title="Ball Model",
     frames=50, spf=2, framerate=25,
-    figure=(size=(600, 600),),
+    figure=(size=(400, 400),),
 )
 
 display_mp4("socialdist1.mp4")
@@ -76,7 +76,7 @@ Agents.abmvideo(
     model2, agent_step!, model_step!;
     title="Billiard-like",
     frames=50, spf=2, framerate=25,
-    figure=(size=(600, 600),),
+    figure=(size=(400, 400),),
 )
 
 display_mp4("socialdist2.mp4")
@@ -102,7 +102,7 @@ Agents.abmvideo(
     model_step!;
     title="Billiard-like with stationary agents",
     frames=50, spf=2, framerate=25,
-    figure=(size=(600, 600),),
+    figure=(size=(400, 400),),
 )
 
 display_mp4("socialdist3.mp4")
@@ -250,7 +250,7 @@ Agents.abmvideo(
     frames=200,
     ac=sir_colors,
     as=10, spf=2, framerate=20,
-    figure=(size=(600, 600),),
+    figure=(size=(400, 400),),
 )
 
 display_mp4("socialdist4.mp4")
@@ -305,7 +305,7 @@ Agents.abmvideo(
     spf=2,
     ac=sir_colors,
     framerate=20,
-    figure=(size=(600, 600),),
+    figure=(size=(400, 400),),
 )
 
 display_mp4("socialdist5.mp4")

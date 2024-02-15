@@ -120,7 +120,7 @@ Agents.abmvideo(
     "schelling.mp4", model, agent_step!;
     ac = groupcolor, am = groupmarker, as = 10,
     framerate = 4, frames = 20,
-    figure = (size = (600, 600),),
+    figure = (size=(400, 400)),
     title = "Schelling's segregation model"
 )
 
