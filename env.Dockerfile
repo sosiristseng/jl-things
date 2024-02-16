@@ -12,9 +12,9 @@ ENV PATH ${JULIA_PATH}/bin:${PATH}
 COPY --from=julia ${JULIA_PATH} ${JULIA_PATH}
 
 WORKDIR /work
+
 # Python dependencies
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir nbconvert matplotlib
 
 # Julia dependencies
 COPY Project.toml Manifest.toml ./
