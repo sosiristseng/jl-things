@@ -41,7 +41,7 @@ jobs:
     - name: List notebooks as a JSON array
       id: set-matrix
       working-directory: docs/${{ inputs.dir }}
-      run: echo "matrix=$(python -c 'import glob, json, os; print(json.dumps(glob.glob("**/*.jl", recursive=True)))')" >> "$GITHUB_OUTPUT"
+      run: echo "matrix=$(python -c 'import glob, json, os; print(json.dumps(glob.glob("**/*.ipynb", recursive=True)))')" >> "$GITHUB_OUTPUT"
 
   execute:
     needs: setup
@@ -54,6 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMG: ghcr.io/${{ github.repository }}:${{ needs.setup.outputs.hash }}
+      NB: docs/${{ inputs.dir }}/${{ matrix.notebook }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -61,21 +62,30 @@ jobs:
           sparse-checkout: |
             .github
             docs/${{ inputs.dir }}
-      - name: Cache built notebook
-        uses: actions/cache@v4
+      - name: Restore notebook if present
+        uses: actions/cache/restore@v4
         id: nb-cache
         with:
-          path: docs/${{ inputs.dir }}/**/*.ipynb
-          key: ${{ runner.os }}-notebook-${{ hashFiles(format('docs/{0}/{1}', inputs.dir, matrix.notebook)) }}-${{ needs.setup.outputs.hash }}
+          path: ${{ env.NB }}
+          key: ${{ runner.os }}-notebook-${{ hashFiles(env.NB) }}-${{ needs.setup.outputs.hash }}
       - name: Execute Notebook
         if: ${{ steps.nb-cache.outputs.cache-hit != 'true' }}
         run: >
           docker run --rm -w /tmp -v ${{ github.workspace }}:/tmp
           ${{ env.IMG }}
-          julia --project=docs/${{ inputs.dir }} --color=yes -- literate.jl docs/${{ inputs.dir }}/${{ matrix.notebook }}
+          jupyter nbconvert --to notebook --execute --inplace
+          --ExecutePreprocessor.timeout=-1
+          --ExecutePreprocessor.kernel_name=$(julia -e 'print("julia-1.",VERSION.minor)')
+          ${{ env.NB }}
+      - name: Cache notebook
+        uses: actions/cache/save@v4
+        if: ${{ steps.nb-cache.outputs.cache-hit != 'true' }}
+        with:
+          path: ${{ env.NB }}
+          key: ${{ steps.nb-cache.outputs.cache-primary-key }}
       - name: Convert artifact Name
         id: art
-        run: echo "name=$(echo ${{ inputs.dir }}/${{ matrix.notebook }} | sed 's/\//-/g')" >> "$GITHUB_OUTPUT"
+        run: echo "name=$(echo ${{ env.NB }} | sed 's/\//-/g')" >> "$GITHUB_OUTPUT"
       - name: Upload Notebook
         uses: actions/upload-artifact@v4
         with:
