@@ -18,5 +18,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Julia dependencies
 COPY Project.toml Manifest.toml ./
-COPY src/ src
 RUN julia --color=yes -e 'using Pkg; Pkg.add(["IJulia"]); import IJulia; IJulia.installkernel("Julia", "--project=@."); Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()'
