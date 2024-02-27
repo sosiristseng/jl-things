@@ -41,6 +41,6 @@ sdeprob = SDEProblem(sde |> complete, u0map, tspan, parammap)
 odesol = solve(odeprob, Tsit5())
 sdesol = solve(sdeprob, SOSRI())
 
-odesol(0.0, idxs=x)
+odesol[x]
 
-sdesol(0.0, idxs=x)
+sdesol[x]
