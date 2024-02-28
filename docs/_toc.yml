@@ -17,16 +17,15 @@ parts:
     chapters:
     - file: diffeq/index
       sections:
-      - file: diffeq/ch01-01-ode
-      - file: diffeq/ch01-02-sde
+      - file: diffeq/01-ode
+      - file: diffeq/02-sde
+      - file: diffeq/03-catalyst
+      - file: diffeq/04-optimization
       - file: diffeq/ch01-03-ensemble
-      - file: diffeq/ch01-04-paramestim
       - file: diffeq/ch01-05-callback
       - file: diffeq/ch01-06-tips
       - file: diffeq/ch02-01-symbolics
       - file: diffeq/ch02-02-modelingptoolkit
-      - file: diffeq/ch02-03-catalyst
-      - file: diffeq/ch02-04-optimization
       - file: diffeq/ch03-01-neuron
     - file: pde/index
       sections:
