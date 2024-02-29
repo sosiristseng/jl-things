@@ -67,7 +67,7 @@ jobs:
         id: nb-cache
         with:
           path: ${{ env.NB }}
-          key: ${{ runner.os }}-notebook-${{ hashFiles(env.NB) }}-${{ needs.setup.outputs.hash }}
+          key: ${{ runner.os }}-nb-${{ hashFiles(env.NB) }}-${{ needs.setup.outputs.hash }}
       - name: Execute Notebook
         if: ${{ steps.nb-cache.outputs.cache-hit != 'true' }}
         run: >
@@ -90,5 +90,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: notebook-${{ steps.art.outputs.name }}
-          path: docs*/${{ inputs.dir }}/**/*.ipynb  # keep folder structure
+          path: docs*/${{ inputs.dir }}/${{ matrix.notebook }}  # keep folder structure
           retention-days: 1
