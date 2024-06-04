@@ -10,22 +10,24 @@ parts:
       sections:
       - file: abm/01-schelling
       - file: abm/02-graph-sars2
-      - file: abm/03-flocking
-      - file: abm/04-social-distancing
-      - file: abm/05-zombie
+      - file: abm/03-social-distancing
+      - file: abm/04-flocking
+      - file: abm/05-event-multiagent
+      - file: abm/06-osmabm
   - caption: Differential Equations
     chapters:
     - file: diffeq/index
       sections:
       - file: diffeq/01-ode
+      - file: diffeq/01-odemtk
       - file: diffeq/02-sde
       - file: diffeq/03-catalyst
       - file: diffeq/04-optimization
       - file: diffeq/05-steadystate
-      - file: diffeq/ch01-03-ensemble
-      - file: diffeq/ch01-05-callback
-      - file: diffeq/ch02-01-symbolics
-      - file: diffeq/ch03-01-neuron
+      - file: diffeq/06-ensemble
+      - file: diffeq/07-callback
+      - file: diffeq/08-symbolics
+      - file: diffeq/model-01-neuron
     - file: pde/index
       sections:
       - file: pde/01-sis
