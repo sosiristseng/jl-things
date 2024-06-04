@@ -14,7 +14,7 @@ COPY --from=julia ${JULIA_PATH} ${JULIA_PATH}
 WORKDIR /work
 
 # Python dependencies
-RUN pip install --no-cache-dir nbconvert matplotlib<3.9
+RUN pip install --no-cache-dir "nbconvert" "matplotlib<3.9"
 
 # Julia dependencies
 COPY Project.toml Manifest.toml ./
