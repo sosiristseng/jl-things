@@ -1,4 +1,4 @@
-FROM julia:1.10.1 as julia
+FROM julia:1.10.3 as julia
 FROM python:3.12.2-slim
 
 # Julia config
@@ -14,7 +14,7 @@ COPY --from=julia ${JULIA_PATH} ${JULIA_PATH}
 WORKDIR /work
 
 # Python dependencies
-RUN pip install --no-cache-dir nbconvert matplotlib
+RUN pip install --no-cache-dir nbconvert matplotlib<3.9
 
 # Julia dependencies
 COPY Project.toml Manifest.toml ./
