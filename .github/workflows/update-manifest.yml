@@ -26,6 +26,7 @@ jobs:
           - abm
           - df
           - diffeq
+          - catalyst
           - pde
           - ude
           - visual
