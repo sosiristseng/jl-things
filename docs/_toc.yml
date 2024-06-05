@@ -21,13 +21,17 @@ parts:
       - file: diffeq/01-ode
       - file: diffeq/01-odemtk
       - file: diffeq/02-sde
-      - file: diffeq/03-catalyst
       - file: diffeq/04-optimization
       - file: diffeq/05-steadystate
       - file: diffeq/06-ensemble
       - file: diffeq/07-callback
       - file: diffeq/08-symbolics
       - file: diffeq/model-01-neuron
+    - file: catalyst/index
+      sections:
+      - file: catalyst/01-repressilator
+      - file: catalyst/02-generate-reactions
+      - file: catalyst/03-tips
     - file: pde/index
       sections:
       - file: pde/01-sis
